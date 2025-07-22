@@ -1,173 +1,194 @@
 # 🩺 Medical Imaging and Report Assistant
 
-A full-stack clinical support tool for radiology, powered by AI and modern web technologies.  
-This project enables clinicians, students, and researchers to upload medical images, receive AI-powered analyses, generate draft reports, and manage patient data—all in a secure, extensible platform.
+A full-stack clinical support tool for radiology, powered by AI and modern web technologies. This project enables clinicians, students, and researchers to upload medical images, receive AI-powered analyses, generate draft reports, and manage patient data—all in a secure, extensible platform.
 
 ---
 
 ## 🚀 Features
 
-### ✅ Implemented
+### ✅ Fully Implemented
 
-- **User Authentication**
-  - JWT-based login and registration
-  - Role-based access (student, instructor, admin)
-- **Patient Management**
-  - Add, view, and manage patient records
-- **AI Image Analysis**
-  - Upload images for AI-powered findings (classification)
-  - Object detection overlays (bounding boxes) for general images
-- **Annotation Viewer**
-  - Visualize AI-generated bounding boxes on uploaded images
-- **AI-Powered Report Generation**
-  - Generate draft radiology reports using LLMs (OpenRouter API)
-  - Reports incorporate AI findings and (soon) patient metadata
-- **Report Management**
-  - View generated reports in a user-friendly dialog
-- **Modern UI/UX**
-  - Built with React, Material UI, and react-konva for annotation
-  - Responsive, clean dashboard for all workflows
-- **Backend**
-  - FastAPI with modular endpoints for patients, analyses, reports, and AI
-  - PostgreSQL for robust, production-ready data storage
+* **User Authentication**
+
+  * JWT-based login and registration
+  * Role-based access (student, instructor, admin)
+* **Patient Management**
+
+  * Add, view, and manage patient records
+* **AI Image Analysis**
+
+  * Upload images for AI-powered findings using TorchXRayVision (medical-specific)
+  * General object detection with torchvision (bounding boxes)
+* **Annotation Viewer**
+
+  * Visualize AI-generated bounding boxes on uploaded images
+* **AI-Powered Report Generation**
+
+  * Generate draft radiology reports using OpenRouter API (LLM-based)
+* **Report Management**
+
+  * View previously generated reports
+* **Modern UI/UX**
+
+  * React dashboard with Material UI, react-konva, and clean, responsive design
+* **Backend**
+
+  * FastAPI with endpoints for auth, patients, analysis, reports
+  * PostgreSQL for production-ready storage (SQLite fallback)
+  * SQLAlchemy ORM and Pydantic schemas
 
 ---
 
 ### 🛠️ In Progress / Planned
 
-- **Enhanced Report Generation**
-  - Pass patient name, age, and study type to LLM for more personalized reports
-- **Report Saving & Review**
-  - Store generated reports in the database and allow users to review/edit them
-- **Literature-Backed (RAG) Reports**
-  - Integrate retrieval-augmented generation (RAG) to cite relevant medical literature in reports
-- **User Profile Management**
-  - Edit profile, change password, manage roles
-- **OAuth Login**
-  - Google/GitHub login for easy access
-- **Image Annotation Tools**
-  - Allow users to draw/edit their own annotations
-- **Medical-Specific Segmentation**
-  - Integrate segmentation models for pixel-level overlays
-- **Real-Time Collaboration**
-  - WebSockets for collaborative review and notifications
-- **Deployment**
-  - Dockerized setup and cloud deployment instructions
-- **Compliance & Security**
-  - Data protection, audit logging, and educational use disclaimer
+* [ ] Include patient metadata (name, age, study type) in LLM reports
+* [ ] Save & edit generated reports in DB
+* [ ] Retrieval-Augmented Generation (RAG) for literature-backed reporting
+* [ ] Profile settings and OAuth (Google, GitHub)
+* [ ] User-generated annotation tools
+* [ ] Segmentation models for pixel-level overlays
+* [ ] Real-time collaboration via WebSocket
+* [ ] Docker + Deployment guide
+* [ ] Security & compliance features
 
 ---
 
 ## 🧑‍💻 Tech Stack
 
-- **Frontend:** React, Material UI, react-konva
-- **Backend:** FastAPI, SQLAlchemy, PostgreSQL
-- **AI/ML:** torchxrayvision, torchvision, OpenRouter (LLM API)
-- **Authentication:** JWT (with planned OAuth)
-- **Deployment:** Docker (planned), cloud-ready
+* **Frontend:** React, Material UI, React Router, React Konva
+* **Backend:** FastAPI, SQLAlchemy, Alembic, Pydantic, PostgreSQL
+* **AI/ML:** TorchXRayVision, torchvision, OpenRouter API (LLM)
+* **Authentication:** JWT (planned OAuth support)
+* **DevOps/Deployment:** Docker (planned), cloud-ready architecture
 
 ---
 
 ## 📦 Getting Started
 
-### 1. **Clone the Repository**
+### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/yourusername/medical-imaging-assistant.git
-cd medical-imaging-assistant
+git clone https://github.com/crimsonglare/medical-imaging-assistant-app.git
+cd medical-imaging-assistant-app
 ```
 
-### 2. **Backend Setup**
-- Install Python dependencies:
-  ```bash
-  cd backend
-  pip install -r requirements.txt
-  ```
-- Set up PostgreSQL and create a database (e.g., `nebula9`).
-- Configure your `.env` file with your database URL and secrets.
-- Initialize the database:
-  ```bash
-  python app/db/init_db.py
-  ```
-- Start the FastAPI server:
-  ```bash
-  uvicorn app.main:app --reload
-  ```
+### 2. Backend Setup
 
-### 3. **Frontend Setup**
-- Install Node.js dependencies:
-  ```bash
-  cd ../frontend
-  npm install
-  ```
-- Start the React development server:
-  ```bash
-  npm run dev
-  ```
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate  # or source venv/bin/activate (Linux/macOS)
+pip install -r requirements.txt
+```
 
-### 4. **AI/LLM Integration**
-- The backend uses OpenRouter for LLM-powered report generation.  
-  Set your OpenRouter API key in the backend code or as an environment variable.
+#### Setup PostgreSQL Database
 
----
+* Create a PostgreSQL DB named `nebula9` (or use SQLite for dev)
+* Create `.env` file:
 
-## 🖼️ Usage
+```ini
+DATABASE_URL=postgresql://username:password@localhost/nebula9
+JWT_SECRET_KEY=your_secret_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+```
 
-- Register and log in.
-- Add new patients and upload medical images.
-- Choose between “Medical Findings” (for clinical AI) and “Object Detection” (for general images).
-- View AI-generated findings and bounding box overlays.
-- Generate draft reports with a single click.
-- (Soon) Save, edit, and review reports; see literature-backed explanations.
+#### Initialize Database
+
+```bash
+python app/db/init_db.py
+```
+
+#### Run FastAPI server
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### 3. Frontend Setup
+
+```bash
+cd ../frontend
+npm install
+npm run dev
+```
 
 ---
 
-## 📝 Roadmap
+## 🔧 OpenRouter API Setup
 
-- [ ] Pass patient info (name, age, study type) to LLM for personalized reports
-- [ ] Save and review generated reports in the database
-- [ ] Integrate RAG for literature-backed reporting
-- [ ] Add user profile management and OAuth login
-- [ ] Enable user annotation tools and medical segmentation overlays
-- [ ] Real-time collaboration and notifications
-- [ ] Dockerize and provide cloud deployment instructions
-- [ ] Add compliance, audit logging, and educational disclaimer
+1. Go to [OpenRouter.ai](https://openrouter.ai/)
+2. Sign in and go to API keys section
+3. Generate a key
+4. Paste it into your backend `.env` as `OPENROUTER_API_KEY`
+
+The API will be used to generate LLM-powered draft reports.
 
 ---
 
-## 🤝 Contributing
+## 🖼️ Usage Flow
 
-Contributions are welcome!  
-Please open issues or pull requests for new features, bug fixes, or documentation improvements.
+1. Register and log in
+2. Add a new patient
+3. Upload a medical image
+4. Choose between:
+
+   * "Medical Findings" (uses TorchXRayVision)
+   * "Object Detection" (uses torchvision)
+5. View AI analysis (including annotated image)
+6. Generate draft report using OpenRouter
+7. (Soon) Save, edit, and review reports
+
+---
+
+## 📅 Roadmap
+
+* [ ] Include metadata in LLM prompt
+* [ ] Store and edit reports in database
+* [ ] Add RAG-based literature citations
+* [ ] OAuth login
+* [ ] Segmentation overlays
+* [ ] Drawing tools for annotations
+* [ ] Docker & deployment scripts
+* [ ] Realtime WebSocket updates
+
+---
+
+## 👥 Contributing
+
+Contributions are welcome. Please open issues or PRs for bugs, features, or documentation improvements.
 
 ---
 
 ## 📄 License
 
-This project is for educational and research purposes only.  
-**Not for clinical use.**  
-See [LICENSE](LICENSE) for details.
+This tool is provided for educational and research use only. **Not for clinical use.**
+See [LICENSE](LICENSE) for more.
 
 ---
 
-## 📚 Acknowledgments
+## 📖 Acknowledgments
 
-- [torchxrayvision](https://github.com/mlmed/torchxrayvision)
-- [OpenRouter](https://openrouter.ai/)
-- [react-konva](https://konvajs.org/docs/react/)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Material UI](https://mui.com/)
+* [TorchXRayVision](https://github.com/mlmed/torchxrayvision)
+* [OpenRouter](https://openrouter.ai/)
+* [FastAPI](https://fastapi.tiangolo.com/)
+* [Material UI](https://mui.com/)
+* [React Konva](https://konvajs.org/docs/react/)
 
 ---
 
 ## 🌐 Live Demo
 
-_Coming soon!_
+*Coming soon*
 
 ---
 
 ## 🏥 Educational Use Disclaimer
 
-This tool is intended for educational and research purposes only.  
-It does not provide medical advice, diagnosis, or treatment.
+This tool is intended for educational and research purposes only. It does not provide medical advice, diagnosis, or treatment.
 
 ---
+
+## 📂 GitHub Repository
+
+All source code, documentation, and setup instructions are available in this repo:
+**[https://github.com/crimsonglare/medical-imaging-assistant-app](https://github.com/crimsonglare/medical-imaging-assistant-app)**
