@@ -2,8 +2,8 @@ from authlib.integrations.starlette_client import OAuth
 
 # Register GitHub OAuth
 # Replace with your GitHub OAuth app credentials
-GITHUB_CLIENT_ID = "Ov23li1vA29bD1QJZ7uI"
-GITHUB_CLIENT_SECRET = "ac4a1e3f223a909f64423e0f2809421c629b0bdf"
+GITHUB_CLIENT_ID = "YOUR_GITHUB_CLIENT_ID"
+GITHUB_CLIENT_SECRET = "YOUR_GITHUB_CLIENT_SECRET"
 
 oauth = OAuth()
 oauth.register(
