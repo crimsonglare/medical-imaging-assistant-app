@@ -11,6 +11,7 @@ A full-stack clinical support tool for radiology, powered by AI and modern web t
 * **User Authentication**
 
   * JWT-based login and registration
+  * GitHub OAuth login (fully integrated, frontend and backend)
   * Role-based access (student, instructor, admin)
 * **Patient Management**
 
@@ -31,6 +32,7 @@ A full-stack clinical support tool for radiology, powered by AI and modern web t
 * **Modern UI/UX**
 
   * React dashboard with Material UI, react-konva, and clean, responsive design
+  * GitHub OAuth login button and automatic token handling in frontend
 * **Backend**
 
   * FastAPI with endpoints for auth, patients, analysis, reports
@@ -44,7 +46,7 @@ A full-stack clinical support tool for radiology, powered by AI and modern web t
 * [ ] Include patient metadata (name, age, study type) in LLM reports
 * [ ] Save & edit generated reports in DB
 * [ ] Retrieval-Augmented Generation (RAG) for literature-backed reporting
-* [ ] Profile settings and OAuth (Google, GitHub)
+* [ ] Profile settings and OAuth (Google)
 * [ ] User-generated annotation tools
 * [ ] Segmentation models for pixel-level overlays
 * [ ] Real-time collaboration via WebSocket
@@ -58,7 +60,7 @@ A full-stack clinical support tool for radiology, powered by AI and modern web t
 * **Frontend:** React, Material UI, React Router, React Konva
 * **Backend:** FastAPI, SQLAlchemy, Alembic, Pydantic, PostgreSQL
 * **AI/ML:** TorchXRayVision, torchvision, OpenRouter API (LLM)
-* **Authentication:** JWT (planned OAuth support)
+* **Authentication:** JWT, GitHub OAuth
 * **DevOps/Deployment:** Docker (planned), cloud-ready architecture
 
 ---
@@ -112,6 +114,12 @@ npm install
 npm run dev
 ```
 
+#### Setup GitHub OAuth
+
+* In `backend/app/core/oauth.py`, set:
+  * `GITHUB_CLIENT_ID = "your_client_id"`
+  * `GITHUB_CLIENT_SECRET = "your_client_secret"`
+
 ---
 
 ## 🔧 OpenRouter API Setup
@@ -127,7 +135,7 @@ The API will be used to generate LLM-powered draft reports.
 
 ## 🖼️ Usage Flow
 
-1. Register and log in
+1. Register and log in (or use GitHub OAuth)
 2. Add a new patient
 3. Upload a medical image
 4. Choose between:
@@ -142,6 +150,7 @@ The API will be used to generate LLM-powered draft reports.
 
 ## 📅 Roadmap
 
+* [x] GitHub OAuth login
 * [ ] Include metadata in LLM prompt
 * [ ] Store and edit reports in database
 * [ ] Add RAG-based literature citations
