@@ -20,7 +20,7 @@ import torchvision.transforms as T
 detection_model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 detection_model.eval()
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 @router.post("/analyze-image")

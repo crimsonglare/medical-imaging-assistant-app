@@ -84,6 +84,14 @@ function Login() {
       >
         Don't have an account? Register
       </Button>
+      <Button
+        variant="outlined"
+        color="inherit"
+        onClick={() => window.location.href = "http://localhost:8000/api/auth/github/login"}
+        sx={{ mt: 2 }}
+      >
+        Login with GitHub
+      </Button>
     </Box>
   );
 }
