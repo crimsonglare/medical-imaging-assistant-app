@@ -41,20 +41,6 @@ A full-stack clinical support tool for radiology, powered by AI and modern web t
 
 ---
 
-### 🛠️ In Progress / Planned
-
-* [ ] Include patient metadata (name, age, study type) in LLM reports
-* [ ] Save & edit generated reports in DB
-* [ ] Retrieval-Augmented Generation (RAG) for literature-backed reporting
-* [ ] Profile settings and OAuth (Google)
-* [ ] User-generated annotation tools
-* [ ] Segmentation models for pixel-level overlays
-* [ ] Real-time collaboration via WebSocket
-* [ ] Docker + Deployment guide
-* [ ] Security & compliance features
-
----
-
 ## 🧑‍💻 Tech Stack
 
 * **Frontend:** React, Material UI, React Router, React Konva
