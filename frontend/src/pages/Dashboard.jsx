@@ -39,6 +39,8 @@ function Dashboard() {
   const [analysesOpen, setAnalysesOpen] = useState(false);
   const [analyses, setAnalyses] = useState([]);
 
+  const [reportsListOpen, setReportsListOpen] = useState(false);
+  const [reports, setReports] = useState([]);
   const [reportOpen, setReportOpen] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [reportLoading, setReportLoading] = useState(false);
@@ -152,6 +154,29 @@ function Dashboard() {
     } catch (err) {
       setAiError("AI analysis failed.");
     }
+  };
+
+  const handleShowReports = async (patient) => {
+    setSelectedPatient(patient);
+    setReportsListOpen(true);
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/reports/patient/${patient.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setReports(response.data);
+    } catch {
+      setReports([]);
+    }
+  };
+
+  const handleEditReport = (report) => {
+    setReportsListOpen(false);
+    setReportPatient(selectedPatient);
+    setCurrentReport(report);
+    setReportText(report.content);
+    setReportOpen(true);
   };
 
   const handleShowAnalyses = async (patientId) => {
@@ -448,6 +473,24 @@ function Dashboard() {
           <Button onClick={() => setAnalysesOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={reportsListOpen} onClose={() => setReportsListOpen(false)} maxWidth="md" fullWidth>
+        <DialogTitle>Reports for {selectedPatient?.name}</DialogTitle>
+        <DialogContent>
+          {reports.length === 0 ? (
+            <Typography>No reports found for this patient.</Typography>
+          ) : (
+            reports.map((r) => (
+              <Box key={r.id} mb={2} p={2} border={1} borderRadius={2} display="flex" justifyContent="space-between" alignItems="center">
+                <Typography>Report from {new Date(r.created_at).toLocaleString()}</Typography>
+                <Button variant="contained" onClick={() => handleEditReport(r)}>View/Edit</Button>
+              </Box>
+            ))
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setReportsListOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
       <Dialog open={reportOpen} onClose={() => setReportOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           Draft Report {reportPatient && `for ${reportPatient.name}`}
@@ -515,7 +558,15 @@ function Dashboard() {
                     sx={{ ml: 1 }}
                     onClick={() => handleGenerateReport(patient)}
                   >
-                    Generate Report
+                    New Report
+                  </Button>
+                   <Button
+                    variant="outlined"
+                    color="info"
+                    sx={{ ml: 1 }}
+                    onClick={() => handleShowReports(patient)}
+                  >
+                    View Reports
                   </Button>
                 </TableCell>
               </TableRow>
