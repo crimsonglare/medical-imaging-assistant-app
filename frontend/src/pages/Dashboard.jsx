@@ -5,11 +5,15 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Stage, Layer, Rect, Text as KonvaText, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+
 
 function Dashboard() {
   const [patients, setPatients] = useState([]);
@@ -36,7 +40,7 @@ function Dashboard() {
   const [analyses, setAnalyses] = useState([]);
 
   const [reportOpen, setReportOpen] = useState(false);
-  const [reportText, setReportText] = useState("");
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState("");
   const [reportPatient, setReportPatient] = useState(null);
