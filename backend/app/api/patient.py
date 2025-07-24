@@ -3,12 +3,12 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.schemas.patient import PatientCreate, PatientRead
 from app.models.patient import Patient
-from app.core.deps import get_db, get_current_user
+from app.core.deps import get_db, get_current_user, role_required
 from app.models.user import User
 
 router = APIRouter(prefix="/api/patients", tags=["patients"])
 
-@router.post("/", response_model=PatientRead)
+@router.post("/", response_model=PatientRead, dependencies=[Depends(role_required(["instructor", "admin"]))])
 def create_patient(patient_in: PatientCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     patient = Patient(**patient_in.dict())
     db.add(patient)
@@ -27,7 +27,7 @@ def get_patient(patient_id: int, db: Session = Depends(get_db), current_user: Us
         raise HTTPException(status_code=404, detail="Patient not found")
     return patient
 
-@router.put("/{patient_id}", response_model=PatientRead)
+@router.put("/{patient_id}", response_model=PatientRead, dependencies=[Depends(role_required(["instructor", "admin"]))])
 def update_patient(patient_id: int, patient_in: PatientCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
@@ -38,7 +38,7 @@ def update_patient(patient_id: int, patient_in: PatientCreate, db: Session = Dep
     db.refresh(patient)
     return patient
 
-@router.delete("/{patient_id}")
+@router.delete("/{patient_id}", dependencies=[Depends(role_required(["admin"]))])
 def delete_patient(patient_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:

@@ -3,11 +3,12 @@ from typing import Optional
 from datetime import datetime
 
 class ReportBase(BaseModel):
-    patient_id: int
-    author_id: int
     content: Optional[str] = None
 
 class ReportCreate(ReportBase):
+    patient_id: int
+
+class ReportUpdate(ReportBase):
     pass
 
 class ReportRead(ReportBase):

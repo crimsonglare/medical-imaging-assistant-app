@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import React, { useRef } from "react";
 import { Stage, Layer, Rect, Text as KonvaText, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 function Dashboard() {
   const [patients, setPatients] = useState([]);
@@ -38,6 +40,7 @@ function Dashboard() {
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState("");
   const [reportPatient, setReportPatient] = useState(null);
+  const [currentReport, setCurrentReport] = useState(null);
 
   const fetchPatients = async () => {
     try {
@@ -191,6 +194,9 @@ function Dashboard() {
       );
       if (reportResponse.data && reportResponse.data.report) {
         setReportText(reportResponse.data.report);
+        // This is a new report, so we don't have an ID yet.
+        // We will create it when the user saves.
+        setCurrentReport({ patient_id: patient.id, content: reportResponse.data.report });
       } else {
         setReportError("Failed to generate report.");
       }
@@ -198,6 +204,36 @@ function Dashboard() {
       setReportError("Failed to generate report.");
     }
     setReportLoading(false);
+  };
+
+  const handleSaveReport = async () => {
+    if (!currentReport) return;
+    const token = localStorage.getItem("token");
+    try {
+      if (currentReport.id) {
+        // Update existing report
+        await axios.put(
+          `http://localhost:8000/api/reports/${currentReport.id}`,
+          { ...currentReport, content: reportText },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else {
+        // Create new report
+        const response = await axios.post(
+          "http://localhost:8000/api/reports/",
+          {
+            patient_id: reportPatient.id,
+            content: reportText,
+            // author_id will be set by the backend based on the token
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setCurrentReport(response.data);
+      }
+      setReportOpen(false);
+    } catch (err) {
+      setReportError("Failed to save report.");
+    }
   };
 
   // Helper to parse findings string to object
@@ -249,9 +285,14 @@ function Dashboard() {
     <Box maxWidth={800} mx="auto" mt={8} p={4}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h4">Patient Dashboard</Typography>
-        <Button variant="outlined" color="secondary" onClick={handleLogout}>
-          Logout
-        </Button>
+        <Box>
+          <Button variant="contained" color="primary" onClick={() => navigate("/profile")} sx={{ mr: 2 }}>
+            My Profile
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Box>
       </Box>
       {error && <Alert severity="error">{error}</Alert>}
       <Button variant="contained" color="primary" onClick={handleOpen} sx={{ mb: 2 }}>
@@ -413,15 +454,17 @@ function Dashboard() {
           ) : reportError ? (
             <Alert severity="error">{reportError}</Alert>
           ) : (
-            <Box>
-              <Typography component="pre" sx={{ whiteSpace: "pre-wrap" }}>
-                {reportText}
-              </Typography>
-            </Box>
+            <ReactQuill
+              theme="snow"
+              value={reportText}
+              onChange={setReportText}
+              style={{ minHeight: '300px' }}
+            />
           )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setReportOpen(false)}>Close</Button>
+          <Button onClick={handleSaveReport} variant="contained">Save Report</Button>
         </DialogActions>
       </Dialog>
       <TableContainer component={Paper}>
