@@ -4,6 +4,12 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import OAuthSuccess from "./pages/OAuthSuccess";
 import Profile from "./pages/Profile";
+import Layout from "./components/Layout";
+
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  return token ? <Layout>{children}</Layout> : <Navigate to="/login" />;
+};
 
 function App() {
   return (
@@ -11,10 +17,16 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/oauth-success" element={<OAuthSuccess />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route
+          path="/dashboard"
+          element={<PrivateRoute><Dashboard /></PrivateRoute>}
+        />
+        <Route
+          path="/profile"
+          element={<PrivateRoute><Profile /></PrivateRoute>}
+        />
+        <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </Router>
   );

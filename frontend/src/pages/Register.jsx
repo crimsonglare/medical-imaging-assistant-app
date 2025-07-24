@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { TextField, Button, Box, Typography, Alert, MenuItem } from "@mui/material";
+import { TextField, Button, Box, Typography, Alert, MenuItem, Paper, Container } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -33,78 +34,76 @@ function Register() {
   };
 
   return (
-    <Box
-      maxWidth={400}
-      mx="auto"
-      mt={8}
-      p={4}
-      boxShadow={3}
-      borderRadius={2}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-    >
-      <Typography variant="h5" mb={2}>
-        Register
-      </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
-      {success && <Alert severity="success">{success}</Alert>}
-      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-        <TextField
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Full Name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Role"
-          select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          fullWidth
-          margin="normal"
-        >
-          <MenuItem value="student">Student</MenuItem>
-          <MenuItem value="instructor">Instructor</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-        </TextField>
-        <TextField
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-        >
-          Register
-        </Button>
-      </form>
-      <Button
-        color="secondary"
-        onClick={() => navigate("/login")}
-        sx={{ mt: 2 }}
+    <Container component="main" maxWidth="xs">
+      <Paper
+        elevation={6}
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: 4,
+        }}
       >
-        Already have an account? Login
-      </Button>
-    </Box>
+        <LocalHospitalIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
+        <Typography component="h1" variant="h5">
+          Sign Up
+        </Typography>
+        {error && <Alert severity="error" sx={{ width: '100%', mt: 2 }}>{error}</Alert>}
+        {success && <Alert severity="success" sx={{ width: '100%', mt: 2 }}>{success}</Alert>}
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <TextField
+            label="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            fullWidth
+            required
+            autoFocus
+          />
+          <TextField
+            label="Email Address"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            required
+          />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            required
+          />
+          <TextField
+            label="Role"
+            select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            fullWidth
+          >
+            <MenuItem value="student">Student</MenuItem>
+            <MenuItem value="instructor">Instructor</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+          </TextField>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          <Button
+            fullWidth
+            onClick={() => navigate("/login")}
+          >
+            Already have an account? Sign In
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 }
 
